@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace Lib.Hazard
 {
+    /**
+     * The laser looks for the player position when it is spawned in. It then moves in a horizontal line in that direction. 
+     */
     public class Laser : MonoBehaviour
     {
-        [SerializeField] private float speed;
-        private float _direction;
+        [SerializeField] protected float speed;
+        protected float _direction;
 
-        void Start()
+        protected virtual void Start()
         {
             _direction = FindFirstObjectByType<AbstractPlayerController>().transform.position.x < transform.position.x
                 ? -1f
@@ -16,12 +19,12 @@ namespace Lib.Hazard
             Destroy(gameObject, 5f);
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             transform.position += Vector3.right * (_direction * Time.fixedDeltaTime * speed);
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player"))
             {

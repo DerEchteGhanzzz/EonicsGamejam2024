@@ -4,19 +4,22 @@ using UnityEngine;
 
 namespace Lib.StaticEnvironment
 {
+    /**
+     * Disables gravity and manages the player velocity to simulate the behaviours of a ladder.
+     */
     public class Ladder : MonoBehaviour
     {
-        private Rigidbody2D _playerRb;
-        private float _gravity;
-        private bool _active;
+        protected Rigidbody2D _playerRb;
+        protected float _gravity;
+        protected bool _active;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _playerRb = FindFirstObjectByType<AbstractPlayerController>().GetComponent<Rigidbody2D>();
             _gravity = _playerRb.gravityScale;
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        protected virtual void OnTriggerStay2D(Collider2D other)
         {
             if (!other.gameObject.CompareTag("Player")) return;
             _playerRb.gravityScale = 0;
@@ -24,14 +27,14 @@ namespace Lib.StaticEnvironment
             _active = true;
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        protected virtual void OnTriggerExit2D(Collider2D other)
         {
             if (!other.gameObject.CompareTag("Player")) return;
             _playerRb.gravityScale = _gravity;
             _active = false;
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (!_active) return;
             if (Input.GetAxisRaw("Vertical") > 0)
